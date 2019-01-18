@@ -1,0 +1,1 @@
+export const KEY_USER_EMAIL = 'user_mail';
