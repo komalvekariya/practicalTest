@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 
-export default InputText = ({ inputplaceholder, imgpeople, imgcancel, multiline, securetext, val, onchange }) => {
+export default InputText = ({ inputplaceholder, imgpeople, imgcancel, multiline, securetext,onpressimg, keyboard,val, onchange ,retutnkey}) => {
     const { container, inputtext, icnimg, } = styles
     return (
         <View style={container}>
-            <Image style={icnimg} source={imgpeople} />
+            <TouchableOpacity> 
+                <Image style={icnimg} source={imgpeople} />
+            </TouchableOpacity>
             <TextInput
                 style={inputtext}
                 placeholder={inputplaceholder}
@@ -15,10 +17,12 @@ export default InputText = ({ inputplaceholder, imgpeople, imgcancel, multiline,
                 secureTextEntry={securetext}
                 value={val}
                 onChangeText={onchange}
+                returnKeyType={"next"}
+                keyboardType={keyboard}
             />
-
-            <Image style={icnimg} source={imgcancel} />
-
+            <TouchableOpacity onPress={onpressimg} >
+                <Image style={icnimg} source={imgcancel} />
+            </TouchableOpacity>
         </View>
     )
 }

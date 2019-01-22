@@ -6,42 +6,62 @@ import Buttonradius from './buttonradius'
 import { KEY_USER_EMAIL } from '../helper/constant'
 
 
-
 export default class SignUp extends Component {
-
     constructor(props) {
         super(props)
         this.state = {
             gendertext: false,
             date: "2016-05-15",
             email: '',
-            password: ''
+            password: '',
+            firstname: '',
+            lastname: '',
+            address: '',
+
 
         }
     }
 
     _onChangegenderfalse = () => {
         const { gendertext } = this.state
-        this.setState({ gendertext: false })
+        this.setState({ gendertext: 'male' })
     }
 
     _onChangegendertrue = () => {
         const { gendertext } = this.state
-        this.setState({ gendertext: true })
+        this.setState({ gendertext: 'female' })
     }
 
-    _emailchangetext = () => {
-        const { email} = this.state
-
-        alert(this.state.email);
-
-    }
     saveData = async () => {
-        await AsyncStorage.setItem(KEY_USER_EMAIL, this.state.email);
-        let user = await AsyncStorage.getItem(KEY_USER_EMAIL);
-        console.warn(user);
+        const { email, password, firstname, lastname, address, date, gendertext } = this.state
+
+        if (isNaN(firstname) && isNaN(lastname) && isNaN(address)) {
+            alert("Value is Not Number");
+        }
+       
+        if(firstname=='' && password=='' && address=='' && email=='' && password=='')
+
+        {
+            alert('please enter value')
+        }
+        let userdata = {
+            email,
+            password,
+            lastname,
+            firstname,
+            address,
+            date,
+            gendertext
+        };
+
+        await AsyncStorage.setItem(KEY_USER_EMAIL, JSON.stringify(userdata));
+        //alert(userdata)
     }
 
+    _infoemail=()=>{
+        alert('abc@gmail.com')
+    }
+  
     render() {
         const { gendertext } = this.state
         const { container, maletext, maletext1, femaletext, femaletext1, inputtext11, imgemail } = styles
@@ -51,15 +71,22 @@ export default class SignUp extends Component {
                     <InputText inputplaceholder='First Name'
                         imgpeople={require('../assets/images/icn_people.png')}
                         imgcancel={require('../assets/images/icn_cancel.png')}
-
+                        val={this.state.firstname}
+                        onchange={(firstname) => this.setState({ firstname })}
+                        onpressimg={(firstname) => this.setState({ firstname })}
                     />
                     <InputText inputplaceholder='Last Name'
                         imgpeople={require('../assets/images/icn_people.png')}
                         imgcancel={require('../assets/images/icn_cancel.png')}
+                        val={this.state.lastname}
+                        onchange={(lastname) => this.setState({ lastname })}
+                        onpressimg={(lastname) => this.setState({ lastname })}
                     />
                     <InputText inputplaceholder='Address'
                         multiline={true}
                         imgpeople={require('../assets/images/icn_home.png')}
+                        val={this.state.address}
+                        onchange={(address) => this.setState({ address })}
                     />
                 </View>
 
@@ -85,18 +112,21 @@ export default class SignUp extends Component {
                             placeholderTextColor='black'
                             value={this.state.email}
                             onChangeText={(email) => this.setState({ email })}
-
+                            keyboardType='email-address'
+                            returnKeyType='next'
                         />
-                        <Image style={imgemail} source={require('../assets/images/icn_info.png')} />
+                        <TouchableOpacity  onPress={this._infoemail}>
+                            <Image style={imgemail} source={require('../assets/images/icn_info.png')} />
+                        </TouchableOpacity>
                     </View>
                     <TextInput
                         placeholder='Password'
-                        // secureTextEntry
+                        secureTextEntry
                         placeholderTextColor='black'
                         style={inputtext11}
                         value={this.state.password}
                         onChangeText={(password) => this.setState({ password })}
-
+                        returnKeyType='done'
                     />
 
                 </View>
@@ -106,7 +136,7 @@ export default class SignUp extends Component {
                         date={this.state.date}
                         mode="date"
                         placeholder="select date"
-                        format="YYYY-MM-DD"
+                        format="DD-MM-YYYY"
                         minDate="1990-05-01"
                         maxDate="2019-01-01"
                         confirmBtnText="Confirm"
@@ -142,7 +172,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
-
     },
     maletext: {
         borderWidth: 1,
@@ -155,7 +184,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30
 
     },
-
     maletext1: {
         borderWidth: 1,
         borderColor: '#005AFF',
@@ -166,9 +194,7 @@ const styles = StyleSheet.create({
         padding: 3,
         paddingHorizontal: 30,
         backgroundColor: '#005AFF'
-
     },
-
 
     femaletext: {
         borderWidth: 1,
@@ -179,7 +205,6 @@ const styles = StyleSheet.create({
         fontSize: 10,
         padding: 3,
         paddingHorizontal: 30
-
     },
 
     femaletext1: {
@@ -189,10 +214,9 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 3,
         borderBottomRightRadius: 3,
         fontSize: 10,
-        padding: 3,
+        
         paddingHorizontal: 30,
         backgroundColor: '#005AFF'
-
     },
     inputtext11: {
         borderTopWidth: 1,
@@ -203,7 +227,6 @@ const styles = StyleSheet.create({
         marginTop: 13,
         fontSize: 12
     },
-
     imgemail: {
         height: 15,
         width: 15,
